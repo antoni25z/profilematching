@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gaspol/employee/employee_api.dart';
 import 'package:gaspol/response/GET_dept_response.dart';
 import 'package:gaspol/response/GET_employee_response.dart';
+
+import '../../aspect_criteria/MyApi.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key, required this.employee});

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gaspol/employee/employee_api.dart';
 import 'package:gaspol/response/GET_dept_response.dart';
 import 'package:gaspol/response/GET_employee_response.dart';
+
+import '../../aspect_criteria/MyApi.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key});
@@ -181,7 +182,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 8, right: 8),
                               child: DropdownButton(
-                                  value: deptSpin,
+                                  value: deptSpin.deptName,
                                   isExpanded: true,
                                   items: snapshot.data?.dept
                                       .map<DropdownMenuItem<Dept>>((e) {

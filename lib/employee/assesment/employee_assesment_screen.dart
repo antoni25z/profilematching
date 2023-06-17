@@ -1,23 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gaspol/GET_aspect_criteria_response.dart';
-import 'package:gaspol/Test.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gaspol/response/GET_aspect_criteria_response.dart';
 import 'package:gaspol/aspect_criteria/MyApi.dart';
 import 'package:gaspol/floor/Assessment.dart';
 import 'package:gaspol/profile_matching_result.dart';
 
-import '../../Aspect.dart';
+import '../../Utility.dart';
+import '../../floor/AppDatabase.dart';
 
 class EmployeeAssesment extends StatefulWidget {
-  const EmployeeAssesment({super.key});
+  const EmployeeAssesment({super.key, required this.name, required this.employeeId});
 
-  final String name = "";
+  final String name;
+  final int employeeId;
 
   @override
   State<EmployeeAssesment> createState() => _EmployeeAssesmentState();
 }
 
 class _EmployeeAssesmentState extends State<EmployeeAssesment> {
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(margin: const EdgeInsets.only(left: 7),child:const Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
 
   List<int> types = [0, 1];
   List<Assessment> an = [];
@@ -26,59 +44,9 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
   List<ProfileMatchingResult> profiles = [];
   double cresult = 0.0;
 
-  List<String> listBobotPenilaian = [
-    "Sangat Baik",
-    "Baik",
-    "Cukup",
-    "Kurang",
-    "Sangat Kurang"
-  ];
-
   String bobotPenilaian = "Sangat Kurang";
 
   Map<String, String> test = {};
-
-  String checkTarget(int? target) {
-    switch(target) {
-      case 1: {
-        return "Sangat Kurang";
-      }
-      case 2: {
-        return "Kurang";
-      }
-      case 3: {
-        return "Cukup";
-      }
-      case 4: {
-        return "Baik";
-      }
-      case 5: {
-        return "Sangat Baik";
-      }
-      default: return "";
-    }
-  }
-
-  double checkTargetValue(String? target) {
-    switch(target) {
-      case "Sangat Kurang": {
-        return 1.0;
-      }
-      case "Kurang": {
-        return 2.0;
-      }
-      case "Cukup": {
-        return 3.0;
-      }
-      case "Baik": {
-        return 4.0;
-      }
-      case "Sangat Baik": {
-        return 5.0;
-      }
-      default: return 0;
-    }
-  }
 
   double GAPCheck(int target) {
     switch(target) {
@@ -173,7 +141,6 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
                                       shrinkWrap: true,
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        print("s: ${test.length.toString()}");
                                         return Card(
                                           child: SizedBox(
                                             height: 40,
@@ -220,13 +187,13 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
                                                       var criteria = response?.results[indexs].criteria[index].name ?? "";
                                                       var type = response?.results[indexs].criteria[index].type ?? -0;
                                                       var bobot = response?.results[indexs].weight ?? -0;
-                                                      var bobot_penilaian = GAPCheck((checkTargetValue(test["$indexs$index"]).toInt() - (response?.results[indexs].criteria[index].target ?? 0)));
-                                                      var target = checkTarget(response?.results[indexs].criteria[index].target);
+                                                      var bobotPenilaian = GAPCheck((checkTargetValue(test["$indexs$index"]).toInt() - (response?.results[indexs].criteria[index].target ?? 0)));
+                                                      var target = response?.results[indexs].criteria[index].target ?? 0;
 
                                                       final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
 
                                                       await database.assessmentDao
-                                                          .addAssessment(Assessment(id: "$indexs$index", aspect: aspect, criteria: criteria, type: type, bobot: bobot, bobot_penilaian: bobot_penilaian, target: target));
+                                                          .addAssessment(Assessment(id: "$indexs$index", aspect: aspect, criteria: criteria, type: type, bobot: bobot, bobot_penilaian: bobotPenilaian, target: target));
                                                     }),
                                                 Container(
                                                   padding: const EdgeInsets.all(4),
@@ -256,14 +223,17 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
                     ),
                   );
                 } else {
-                  return Expanded(child: const Center(child: CircularProgressIndicator(),));
+                  return const Expanded(child: Center(child: CircularProgressIndicator(),));
                 }
               }
             ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
+                onPressed: () {
+
+                  showLoaderDialog(context);
+
                   getAllAssessments().then((value) {
                     for (Result i in aspect) {
                       for (Assessment mode in value) {
@@ -282,8 +252,6 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
                       double cores = core.fold(0.0, (previous, current) => previous + current) / core.length.toDouble();
                       double second = secondary.fold(0.0, (previous, current) => previous + current) / secondary.length.toDouble();
 
-                      print("c: ${cores}");
-
                       double n = (cores * i.coreWeight) + (second * i.secondaryWeight);
 
                       profiles.add(ProfileMatchingResult(i.name, n, i.weight));
@@ -296,11 +264,19 @@ class _EmployeeAssesmentState extends State<EmployeeAssesment> {
                       cresult += result.nilai * (result.bobot / 100);
                     }
 
-                    print("r : $cresult");
+                    addResultRating(widget.employeeId, DateTime.now().month, DateTime.now().year, cresult).then((value) {
+                      if (value.error) {
+                        Navigator.pop(context);
+                        Fluttertoast.showToast(msg: value.message, toastLength: Toast.LENGTH_SHORT);
+                      } else {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
+                    });
                   });
                 },
                 child: const Text(
-                  "Hitung",
+                  "Simpan",
                   style: TextStyle(fontFamily: 'poppins'),
                 ),
               ),

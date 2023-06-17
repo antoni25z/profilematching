@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gaspol/admin_home_screen.dart';
+import 'package:gaspol/aspect_criteria/aspect/AspectScreen.dart';
+import 'package:gaspol/aspect_criteria/aspect/add/add_aspect_screen.dart';
+import 'package:gaspol/aspect_criteria/criteria/add_criteria/add_criteria_screen.dart';
 import 'package:gaspol/employee/add/add_employee.dart';
 import 'package:gaspol/employee/assesment/employee_assesment_screen.dart';
 import 'package:gaspol/employee/manage_employee.dart';
@@ -26,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My App',
-      home: EmployeeAssesment(),
+      home: AddCriteriaScreen(),
       /*
       home: type == null
           ? const LoginScreen()
