@@ -34,6 +34,7 @@ class _AddCriteriaScreenState extends State<AddCriteriaScreen> {
           "Penambahan Kriteria Aspek",
           style: TextStyle(fontFamily: 'poppins'),
         ),
+        backgroundColor: Color(0xFF6c72e0),
       ),
       body: SafeArea(
         child: Column(
@@ -158,14 +159,14 @@ class _AddCriteriaScreenState extends State<AddCriteriaScreen> {
                     Fluttertoast.showToast(msg: "Data Belum Lengkap");
                   } else {
                     showLoaderDialog(context);
-                    var criteria = Criteria(id: 0, name: name, type: typeV, target: targetV,aspectDetail: AspectDetail(id: aspectV, name: aspectSpin ?? ""), deptId: 0);
+                    var criteria = Criteria(id: 0, name: name, type: typeV, target: targetV,aspectDetail: AspectDetail(id: aspectV, name: aspectSpin ?? ""));
                     addCriteria(criteria).then((value)  {
                       if (value.error) {
                         Navigator.pop(context);
                         Fluttertoast.showToast(msg: value.message, toastLength: Toast.LENGTH_SHORT);
                       } else {
                         Navigator.pop(context);
-                        Navigator.pop(context);
+                        Navigator.pop(context, "detect");
                       }
                     });
                   }

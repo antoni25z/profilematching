@@ -27,62 +27,65 @@ class _AddAspectScreenState extends State<AddAspectScreen> {
           "Penambahan Aspek",
           style: TextStyle(fontFamily: 'poppins'),
         ),
+        backgroundColor: Color(0xFF6c72e0),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            MyTextInput(
-              "Nama Aspek",
-              TextInputType.text,
-              cName,
-            ),
-            MyTextInput(
-              "Bobot Core",
-              TextInputType.number,
-              cCoreWeight,
-            ),
-            MyTextInput(
-              "Bobot Secondary",
-              TextInputType.number,
-              cSecondaryWeight,
-            ),
-            MyTextInput(
-              "Bobot",
-              TextInputType.number,
-              cWeight,
-            ),
-            Container(
-              margin: const EdgeInsets.all(8),
-              child: ElevatedButton(
-                onPressed: () {
-                  var name = cName.text;
-                  var coreW = cCoreWeight.text;
-                  var secondaryW = cSecondaryWeight.text;
-                  var weight = cWeight.text;
-
-                  if (name.isEmpty || coreW.isEmpty || secondaryW.isEmpty || weight.isEmpty) {
-                    Fluttertoast.showToast(msg: "Data Belum Lengkap");
-                  } else {
-                    showLoaderDialog(context);
-                    var aspect = Aspect(id: 0, name: name, coreWeight: coreW as int, secondaryWeight: secondaryW as int, weight: weight as int);
-                    addAspect(aspect).then((value)  {
-                      if (value.error) {
-                        Navigator.pop(context);
-                        Fluttertoast.showToast(msg: value.message, toastLength: Toast.LENGTH_SHORT);
-                      } else {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      }
-                    });
-                  }
-                },
-                child: const Text(
-                  "Tambah",
-                  style: TextStyle(fontFamily: 'poppins'),
-                ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MyTextInput(
+                "Nama Aspek",
+                TextInputType.text,
+                cName,
               ),
-            )
-          ],
+              MyTextInput(
+                "Bobot Core",
+                TextInputType.number,
+                cCoreWeight,
+              ),
+              MyTextInput(
+                "Bobot Secondary",
+                TextInputType.number,
+                cSecondaryWeight,
+              ),
+              MyTextInput(
+                "Bobot",
+                TextInputType.number,
+                cWeight,
+              ),
+              Container(
+                margin: const EdgeInsets.all(8),
+                child: ElevatedButton(
+                  onPressed: () {
+                    var name = cName.text;
+                    var coreW = cCoreWeight.text;
+                    var secondaryW = cSecondaryWeight.text;
+                    var weight = cWeight.text;
+
+                    if (name.isEmpty || coreW.isEmpty || secondaryW.isEmpty || weight.isEmpty) {
+                      Fluttertoast.showToast(msg: "Data Belum Lengkap");
+                    } else {
+                      showLoaderDialog(context);
+                      var aspect = Aspect(id: 0, name: name, coreWeight: int.parse(coreW), secondaryWeight: int.parse(secondaryW), weight: int.parse(weight));
+                      addAspect(aspect).then((value)  {
+                        if (value.error) {
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(msg: value.message, toastLength: Toast.LENGTH_SHORT);
+                        } else {
+                          Navigator.pop(context);
+                          Navigator.pop(context, "detect");
+                        }
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Tambah",
+                    style: TextStyle(fontFamily: 'poppins'),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

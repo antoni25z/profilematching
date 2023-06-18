@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gaspol/attendance/attendance_screen.dart';
+import 'package:gaspol/employee/add/add_employee.dart';
+import 'package:gaspol/employee/assesment/employee_assesment_screen.dart';
+import 'package:gaspol/employee/edit/edit_employee.dart';
 import 'package:gaspol/response/GET_employee_response.dart';
 
 import '../Utility.dart';
@@ -34,7 +38,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     height: 8,
                   ),
                   Text(
-                    "Departemen : ${employee?.dept}",
+                    "Departemen : ${employee?.dept.deptName}",
                     style: const TextStyle(fontSize: 12),
                   )
                 ],
@@ -44,14 +48,33 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => EmployeeAssesment(
+                              name: "${employee?.fname} ${employee?.lname}",
+                              employeeId: employee?.id ?? -0)),
+                    );
+                  },
                   icon: const Icon(
                     Icons.add_chart,
                     color: Colors.green,
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => AttendanceScreen(employeeId: employee?.id ?? 0)),
+                    );
+                    if (result != null) {
+                      setState(() {
+
+                      });
+                    }
+                  },
                   icon: const Icon(
                     Icons.add_card,
                     color: Colors.green,
@@ -59,31 +82,36 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 ),
                 IconButton(
                   onPressed: () {
-                    AlertDialog(
-                      content: const Text(
-                          "Apakah anda yakin ingin menghapus karyawan ini?"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            showLoaderDialog(context);
+                    showDialog(barrierDismissible: false,
+                      context:context,
+                      builder:(BuildContext context){
+                        return AlertDialog(
+                          content: const Text(
+                              "Apakah anda yakin ingin menghapus karyawan ini?"),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Tidak"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                showLoaderDialog(context);
 
-                            deleteEmployee(employee?.id).then((value) => {
+                                deleteEmployee(employee?.id).then((value) => {
                                   if (value.error)
                                     {Navigator.pop(context)}
                                   else
                                     {Navigator.pop(context), setState(() {})}
                                 });
-                          },
-                          child: const Text("Ya"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Tidak"),
-                        ),
-                      ],
+                              },
+                              child: const Text("Ya"),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                   icon: const Icon(
@@ -104,6 +132,26 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Manage Employee'),
+        backgroundColor: Color(0xFF6c72e0),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => const AddEmployee()),
+          );
+          if (result != null) {
+            setState(() {
+
+            });
+          }
+        },
+        backgroundColor: Colors.red,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
       body: Column(
         children: [
@@ -125,14 +173,36 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
             future: getEmployees(search),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Expanded(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data?.employee.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return employeeItem(snapshot.data?.employee[index]);
-                      }),
-                );
+                if (snapshot.data?.employee.isEmpty == true) {
+                  return const Expanded(
+                    child: Center(
+                      child: Text("Belum Ada Data"),
+                    ),
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data?.employee.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              var result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) => EditEmployee(employee: snapshot.data?.employee[index],)),
+                              );
+                              if (result != null) {
+                                setState(() {
+
+                                });
+                              }
+                            },
+                              child: employeeItem(snapshot.data?.employee[index]),
+                          );
+                        }),
+                  );
+                }
               } else {
                 return const Expanded(
                   child: Center(

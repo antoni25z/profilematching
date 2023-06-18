@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gaspol/admin_home_screen.dart';
 import 'package:gaspol/employee_home_screen.dart';
-import 'package:gaspol/result_rating/ResultRatingScreen.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'My App',
       home: type == null
           ? const LoginScreen()
-          : type == 1
+          : type == 0
               ? EmployeeHomeScreen(name: name ?? "", dept: dept ?? "",)
               : AdminHomeScreen(name: name ?? "",),
       localizationsDelegates: const [

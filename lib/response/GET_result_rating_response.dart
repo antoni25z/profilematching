@@ -25,7 +25,7 @@ class ResultRatingResponse {
 class Datum {
   int id;
   EmployeeDetail employeeDetail;
-  int result;
+  double result;
   int permit;
   int alpha;
   int sick;

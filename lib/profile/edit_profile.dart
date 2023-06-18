@@ -17,31 +17,31 @@ class _StateEditProfile extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(250),
+        preferredSize: const Size.fromHeight(250),
         child: AppBar(
-          backgroundColor: Color(0xFF666BDB), // Set the desired color
+          backgroundColor: const Color(0xFF666BDB), // Set the desired color
           elevation: 0,
           flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage('assets/images/ic_profile.png'),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Text(
                 widget.name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Text(
                 'Division: ${widget.dept}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.white,
                 ),
@@ -53,17 +53,17 @@ class _StateEditProfile extends State<EditProfile> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
               child: ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.lock,
                   color: Color(0xFF666BDB),
                 ),
-                title: Text('Change Password'),
-                trailing: Icon(Icons.arrow_right_sharp),
+                title: const Text('Change Password'),
+                trailing: const Icon(Icons.arrow_right_sharp),
                 onTap: () {
                   Navigator.push(
                     context,

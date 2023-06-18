@@ -12,13 +12,13 @@ class CriteriaResponse {
   factory CriteriaResponse.fromJson(Map<String, dynamic> json) => CriteriaResponse(
     error: json["error"],
     message: json["message"],
-    criterias: List<Criteria>.from(json["criterias"].map((x) => Criteria.fromJson(x))),
+    criterias: List<Criteria>.from(json["criteria"].map((x) => Criteria.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "error": error,
     "message": message,
-    "criterias": List<dynamic>.from(criterias.map((x) => x.toJson())),
+    "criteria": List<dynamic>.from(criterias.map((x) => x.toJson())),
   };
 }
 
@@ -28,7 +28,6 @@ class Criteria {
   int type;
   int target;
   AspectDetail aspectDetail;
-  int deptId;
 
   Criteria({
     required this.id,
@@ -36,7 +35,6 @@ class Criteria {
     required this.type,
     required this.target,
     required this.aspectDetail,
-    required this.deptId,
   });
 
   factory Criteria.fromJson(Map<String, dynamic> json) => Criteria(
@@ -45,7 +43,6 @@ class Criteria {
     type: json["type"],
     target: json["target"],
     aspectDetail: AspectDetail.fromJson(json["aspect_detail"]),
-    deptId: json["dept_id"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,7 +51,6 @@ class Criteria {
     "type": type,
     "target": target,
     "aspect_detail": aspectDetail.toJson(),
-    "dept_id": deptId,
   };
 }
 

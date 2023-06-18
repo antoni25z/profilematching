@@ -1,7 +1,7 @@
 class LoginResponse {
   bool error;
   String message;
-  User user;
+  User? user;
 
   LoginResponse({
     required this.error,
@@ -18,7 +18,7 @@ class LoginResponse {
   Map<String, dynamic> toJson() => {
         "error": error,
         "message": message,
-        "user": user.toJson(),
+        "user": user?.toJson(),
       };
 }
 

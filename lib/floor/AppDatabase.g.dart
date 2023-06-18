@@ -127,7 +127,7 @@ class _$AssessmentDao extends AssessmentDao {
 
   @override
   Future<List<Assessment>> getAllAssessments() async {
-    return _queryAdapter.queryList('SELECT * FROM Assesment',
+    return _queryAdapter.queryList('SELECT * FROM Assessment',
         mapper: (Map<String, Object?> row) => Assessment(
             id: row['id'] as String,
             aspect: row['aspect'] as String,
@@ -136,6 +136,11 @@ class _$AssessmentDao extends AssessmentDao {
             bobot: row['bobot'] as int,
             bobot_penilaian: row['bobot_penilaian'] as double,
             target: row['target'] as int));
+  }
+
+  @override
+  Future<void> clearAssessment() async {
+    await _queryAdapter.queryNoReturn('DELETE * FROM Assessment');
   }
 
   @override

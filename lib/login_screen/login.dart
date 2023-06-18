@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gaspol/Preferences.dart';
 import 'package:gaspol/admin_home_screen.dart';
 import 'package:gaspol/employee_home_screen.dart';
 import 'package:gaspol/login_screen/login_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordVisible = !_passwordVisible;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const Text(
                       'Employee Assessment',
                       style: TextStyle(
+                        fontFamily: 'poppins',
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -72,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _usernameController,
                               decoration: const InputDecoration(
                                 labelText: 'Username',
+                                labelStyle: TextStyle(fontFamily: 'poppins'),
                                 prefixIcon: Icon(Icons.person),
                                 border: OutlineInputBorder(),
                               ),
@@ -81,6 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _passwordController,
                               decoration: InputDecoration(
                                 labelText: 'Password',
+                                labelStyle: TextStyle(fontFamily: 'poppins'),
                                 prefixIcon: const Icon(Icons.lock),
                                 suffixIcon: GestureDetector(
                                   onTap: _togglePasswordVisibility,
@@ -96,9 +98,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 16.0),
                             ElevatedButton(
-                              onPressed: () async {
-                                final String username = _usernameController.text;
-                                final String password = _passwordController.text;
+                              onPressed: () {
+                                final String username =
+                                    _usernameController.text;
+                                final String password =
+                                    _passwordController.text;
 
                                 setState(() {
                                   isLoading = true;
@@ -107,59 +111,73 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (username.isEmpty || password.isEmpty) {
                                   errorMessage = "Field not filled";
                                   Fluttertoast.showToast(
-                                      msg: "Field not filled", toastLength: Toast.LENGTH_SHORT);
+                                      msg: "Field not filled",
+                                      toastLength: Toast.LENGTH_SHORT);
                                 } else {
-                                  final response = await login(username, password);
-                                  if (!response.error) {
-                                    SharedPreferences pref = await SharedPreferences.getInstance();
-                                    if (response.user.type == 0) {
-                                      pref.setInt("type", response.user.type);
-                                      pref.setString("name", response.user.username);
-                                      pref.setString("dept", response.user.dept);
-                                      if (context.mounted) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                AdminHomeScreen(name: response.user.username),
-                                          ),
-                                        );
+                                  login(username, password).then((response) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    if (!response.error) {
+                                      if (response.user?.type == 1) {
+                                        Preferences().saveSession(response.user?.type, response.user?.username, response.user?.dept);
+                                        if (context.mounted) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  AdminHomeScreen(
+                                                      name:
+                                                      response.user?.username ?? ""),
+                                            ),
+                                          );
+                                        }
+                                      } else {
+                                        Preferences().saveSession(response.user?.type, response.user?.username, response.user?.dept);
+                                        if (context.mounted) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  EmployeeHomeScreen(
+                                                    name: response.user?.username ?? "",
+                                                    dept: response.user?.dept ?? "",
+                                                  ),
+                                            ),
+                                          );
+                                        }
                                       }
                                     } else {
-                                      pref.setInt("type", response.user.type);
-                                      pref.setString("name", response.user.username);
-                                      pref.setString("dept", response.user.dept);
-                                      if (context.mounted) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                 EmployeeHomeScreen(name: response.user.username, dept: response.user.dept,),
-                                          ),
-                                        );
-                                      }
+                                      setState(() {
+                                        errorMessage = response.message;
+                                      });
+                                      Fluttertoast.showToast(
+                                          msg: response.message,
+                                          toastLength: Toast.LENGTH_SHORT);
                                     }
-                                  } else {
-                                    setState(() {
-                                      errorMessage = response.message;
-                                    });
-                                    Fluttertoast.showToast(
-                                        msg: response.message, toastLength: Toast.LENGTH_SHORT);
-                                  }
+                                  });
                                 }
                               },
                               child: isLoading
-                                  ? const SizedBox(
-                                      width: 34,
-                                      height: 34,
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : const Text('Login'),
+                                  ? const Center(
+                                    child: SizedBox(
+                                        width: 34,
+                                        height: 34,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                  )
+                                  : const Text(
+                                      'Login',
+                                      style: TextStyle(fontFamily: 'poppins'),
+                                    ),
                             ),
                             const SizedBox(height: 8.0),
                             const Text(
                               '© Assesment Employee, 2023',
                               style: TextStyle(
+                                fontFamily: 'poppins',
                                 fontSize: 12.0,
                                 color: Colors.grey,
                               ),

@@ -7,6 +7,9 @@ abstract class AssessmentDao {
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> addAssessment(Assessment assesment);
   
-  @Query('SELECT * FROM Assesment')
+  @Query('SELECT * FROM Assessment')
   Future<List<Assessment>> getAllAssessments();
+
+  @Query('DELETE * FROM Assessment')
+  Future<void> clearAssessment();
 }

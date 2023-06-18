@@ -10,7 +10,7 @@ import '../response/GET_dept_response.dart';
 import '../response/GET_employee_response.dart';
 import '../response/POST_default_response.dart';
 
-const String baseUrl = "";
+const String baseUrl = "http://10.0.2.2/myapi/";
 
 Future<AspectCriteriaResponse> getAspectCriteria() async {
   final response = await http.get(Uri.parse("${baseUrl}aspect_criteria"));
@@ -22,22 +22,22 @@ Future<DefaultResponse> addAspect(Aspect result) async {
       Uri.parse("${baseUrl}add_aspect"),
       body: {
         "name": result.name,
-        "core_weight": result.coreWeight,
-        "secondary_weight": result.secondaryWeight,
-        "weight": result.weight
+        "core_weight": result.coreWeight.toString(),
+        "secondary_weight": result.secondaryWeight.toString(),
+        "weight": result.weight.toString()
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));
 }
 
 Future<DefaultResponse> editAspect(Aspect result) async {
-  final response = await http.put(
+  final response = await http.post(
       Uri.parse("${baseUrl}update_aspect/${result.id}"),
       body: {
         "name": result.name,
-        "core_weight": result.coreWeight,
-        "secondary_weight": result.secondaryWeight,
-        "weight": result.weight
+        "core_weight": result.coreWeight.toString(),
+        "secondary_weight": result.secondaryWeight.toString(),
+        "weight": result.weight.toString()
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));
@@ -58,24 +58,24 @@ Future<DefaultResponse> addCriteria(Criteria result) async {
       Uri.parse("${baseUrl}add_criteria"),
       body: {
         "name": result.name,
-        "type": result.type,
-        "target": result.target,
-        "aspect_id": result.aspectDetail.id,
-        "dept_id": result.deptId
+        "type": result.type.toString(),
+        "target": result.target.toString(),
+        "aspect_id": result.aspectDetail.id.toString(),
+        "dept_id": "0"
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));
 }
 
 Future<DefaultResponse> editCriteria(Criteria result) async {
-  final response = await http.put(
+  final response = await http.post(
       Uri.parse("${baseUrl}update_criteria/${result.id}"),
       body: {
         "name": result.name,
-        "type": result.type,
-        "target": result.target,
-        "aspect_id": result.aspectDetail.id,
-        "dept_id": result.deptId
+        "type": result.type.toString(),
+        "target": result.target.toString(),
+        "aspect_id": result.aspectDetail.id.toString(),
+        "dept_id": "0"
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));
@@ -95,10 +95,10 @@ Future<DefaultResponse> addResultRating(int employeeId, int month, int year, dou
   final response = await http.post(
     Uri.parse("${baseUrl}add_result_rating"),
       body: {
-        "employee_id": employeeId,
-        "month": month,
-        "year": year,
-        "result": result
+        "employee_id": employeeId.toString(),
+        "month": month.toString(),
+        "year": year.toString(),
+        "result": result.toString()
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));
@@ -110,19 +110,15 @@ Future<DeptResponse> getDepts() async {
 }
 
 Future<EmployeeResponse> getEmployees(String employeeName) async {
-  final response = await http.get(Uri.parse("${baseUrl}employees/$employeeName"));
+  final response = await http.get(Uri.parse("${baseUrl}employees?name=$employeeName"));
   return EmployeeResponse.fromJson(jsonDecode(response.body));
 }
 
 Future<DefaultResponse> addEmployee(
     Employee employee) async {
   final response = await http.post(Uri.parse("${baseUrl}add_employee"),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      encoding: Encoding.getByName('utf-8'),
       body: {
-        "id": employee.id,
+        "id": employee.id.toString(),
         "fname": employee.fname,
         "lname": employee.lname,
         "email": employee.email,
@@ -130,9 +126,9 @@ Future<DefaultResponse> addEmployee(
         "birth_place": employee.birthPlace,
         "birth_date": employee.birthDate,
         "join_date": employee.joinDate,
-        "dept_id": employee.dept.id,
+        "dept_id": employee.dept.id.toString(),
         "address": employee.address,
-        "promoted": employee.promoted,
+        "promoted": employee.promoted.toString(),
         "password": employee.password,
         "username": employee.username
       });
@@ -141,11 +137,7 @@ Future<DefaultResponse> addEmployee(
 
 Future<DefaultResponse> updateEmployee(
     Employee employee) async {
-  final response = await http.put(Uri.parse("${baseUrl}update_employee/${employee.id}"),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      encoding: Encoding.getByName('utf-8'),
+  final response = await http.post(Uri.parse("${baseUrl}update_employee/${employee.id}"),
       body: {
         "fname": employee.fname,
         "lname": employee.lname,
@@ -154,9 +146,9 @@ Future<DefaultResponse> updateEmployee(
         "birth_place": employee.birthPlace,
         "birth_date": employee.birthDate,
         "join_date": employee.joinDate,
-        "dept_id": employee.dept.id,
+        "dept_id": employee.dept.id.toString(),
         "address": employee.address,
-        "promoted": employee.promoted,
+        "promoted": employee.promoted.toString(),
         "password": employee.password,
         "username": employee.username
       });
@@ -180,6 +172,22 @@ Future<DefaultResponse> resetPassword(String username, String oldPassword, Strin
         "username": username,
         "old_password": oldPassword,
         "new_password": newPassword
+      }
+  );
+  return DefaultResponse.fromJson(jsonDecode(response.body));
+}
+
+Future<DefaultResponse> addAttendance(int employeeId, String permit, String sick, String alpha, int month, int year) async {
+  print(permit);
+  final response = await http.post(
+      Uri.parse("${baseUrl}add_attendance"),
+      body: {
+        "employee_id": employeeId.toString(),
+        "permit": permit,
+        "sick": sick,
+        "alpha": alpha,
+        "month" : month.toString(),
+        "year" : year.toString()
       }
   );
   return DefaultResponse.fromJson(jsonDecode(response.body));

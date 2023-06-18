@@ -153,80 +153,118 @@ class _EmployeeHomeScreeState extends State<EmployeeHomeScreen> {
                       future: getRatingResults(_selected.year, _selected.month),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Expanded(
-                            child: ListView.builder(
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                          if (snapshot.data?.data.isEmpty == true) {
+                            return const Expanded(
+                              child: Center(
+                                child: Text("Belum Ada Data"),
+                              ),
+                            );
+                          } else {
+                            return Expanded(
+                              child: ListView.builder(
+                                  itemCount: snapshot.data?.data.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.all(8),
+                                      child: Card(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceBetween,
                                           children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(left: 8, top: 8),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    width: 25,
-                                                    height: 25,
-                                                    alignment: Alignment.center,
-                                                    margin: const EdgeInsets.only(right: 8),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius: const BorderRadius.all(
-                                                            Radius.circular(15)),
-                                                        border: Border.all(
-                                                            color: Colors.black,
-                                                            width: 1.0)
-                                                    ),
-                                                    child: Text("${index + 1}", style: const TextStyle(
-                                                        fontFamily: 'poppins',
-                                                        fontWeight: FontWeight.bold
-                                                    ),),
-                                                  ),
-                                                  Text("${snapshot.data?.data[index].employeeDetail.employeeName}", style: const TextStyle(
-                                                      fontFamily: 'poppins',
-                                                      fontWeight: FontWeight.bold
-                                                  ),)
-                                                ],
-                                              ),
-                                            ),
-                                            Row(
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Alpha : ${snapshot.data?.data[index].alpha}", style: const TextStyle(
-                                                      fontFamily: 'poppins'
-                                                  ),),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 8, top: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 25,
+                                                        height: 25,
+                                                        alignment: Alignment
+                                                            .center,
+                                                        margin: const EdgeInsets
+                                                            .only(right: 8),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius: const BorderRadius
+                                                                .all(
+                                                                Radius.circular(
+                                                                    15)),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black,
+                                                                width: 1.0)
+                                                        ),
+                                                        child: Text(
+                                                          "${index + 1}",
+                                                          style: const TextStyle(
+                                                              fontFamily: 'poppins',
+                                                              fontWeight: FontWeight
+                                                                  .bold
+                                                          ),),
+                                                      ),
+                                                      Text("${snapshot.data
+                                                          ?.data[index]
+                                                          .employeeDetail
+                                                          .employeeName}",
+                                                        style: const TextStyle(
+                                                            fontFamily: 'poppins',
+                                                            fontWeight: FontWeight
+                                                                .bold
+                                                        ),)
+                                                    ],
+                                                  ),
                                                 ),
-                                                Text("Izin : ${snapshot.data?.data[index].permit}", style: const TextStyle(
-                                                    fontFamily: 'poppins'
-                                                ),),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    "Sakit : ${snapshot.data?.data[index].sick}", style: const TextStyle(
-                                                      fontFamily: 'poppins'
-                                                  ),),
+                                                Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .all(8.0),
+                                                      child: Text(
+                                                        "Alpha : ${snapshot.data
+                                                            ?.data[index].alpha}",
+                                                        style: const TextStyle(
+                                                            fontFamily: 'poppins'
+                                                        ),),
+                                                    ),
+                                                    Text("Izin : ${snapshot.data
+                                                        ?.data[index].permit}",
+                                                      style: const TextStyle(
+                                                          fontFamily: 'poppins'
+                                                      ),),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .all(8.0),
+                                                      child: Text(
+                                                        "Sakit : ${snapshot.data
+                                                            ?.data[index].sick}",
+                                                        style: const TextStyle(
+                                                            fontFamily: 'poppins'
+                                                        ),),
+                                                    )
+                                                  ],
                                                 )
                                               ],
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.all(8),
+                                              child: Text(
+                                                "${snapshot.data?.data[index]
+                                                    .result}",
+                                                style: const TextStyle(
+                                                    fontFamily: 'poppins',
+                                                    fontWeight: FontWeight.bold
+                                                ),),
                                             )
                                           ],
                                         ),
-                                        Container(
-                                          margin: const EdgeInsets.all(8),
-                                          child: Text("${snapshot.data?.data[index].result}", style: const TextStyle(
-                                              fontFamily: 'poppins',
-                                              fontWeight: FontWeight.bold
-                                          ),),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }),
-                          );
+                                      ),
+                                    );
+                                  }),
+                            );
+                          }
                         } else {
                           return const Expanded(
                             child: Center(
