@@ -1,15 +1,15 @@
-class Welcome {
+class ResultRatingResponse {
   bool error;
   String message;
   List<Datum> data;
 
-  Welcome({
+  ResultRatingResponse({
     required this.error,
     required this.message,
     required this.data,
   });
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory ResultRatingResponse.fromJson(Map<String, dynamic> json) => ResultRatingResponse(
     error: json["error"],
     message: json["message"],
     data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),

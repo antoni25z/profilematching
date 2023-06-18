@@ -26,22 +26,21 @@ class User {
   int id;
   String username;
   int type;
+  String dept;
 
-  User({
-    required this.id,
-    required this.username,
-    required this.type,
-  });
+  User(
+      {required this.id,
+      required this.username,
+      required this.type,
+      required this.dept});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         username: json["username"],
         type: json["type"],
+        dept: json["dept"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "type": type,
-      };
+  Map<String, dynamic> toJson() =>
+      {"id": id, "username": username, "type": type, "dept": dept};
 }

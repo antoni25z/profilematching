@@ -39,13 +39,14 @@ dependencies:
   animated_bottom_navigation_bar: ^1.2.0
   simple_animations: ^5.0.0+3
   flutter_iconpicker: ^3.2.2
-  table_calendar: ^3.0.9
   flutter_profile_picture: ^2.0.0
   font_awesome_flutter: ^10.4.0
   http: ^0.13.6
   shared_preferences: ^2.1.2
   fluttertoast: ^8.2.2
   floor: ^1.4.2
+  month_year_picker: ^0.2.0+4
+  flutter_localization: ^0.1.12
 dev_dependencies:
   flutter_test:
     sdk: flutter

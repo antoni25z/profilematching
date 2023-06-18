@@ -86,3 +86,18 @@ List<String> types = [
   "Core",
   "Secondary",
 ];
+
+List<String> months = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember'
+];

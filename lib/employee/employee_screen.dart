@@ -1,33 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gaspol/response/GET_employee_response.dart';
 
+import '../Utility.dart';
 import '../aspect_criteria/MyApi.dart';
 
-class ManageEmployee extends StatefulWidget {
-  const ManageEmployee({super.key});
+class EmployeeScreen extends StatefulWidget {
+  const EmployeeScreen({super.key});
 
   @override
-  State<ManageEmployee> createState() => _ManageEmployeeState();
+  State<EmployeeScreen> createState() => _EmployeeScreenState();
 }
 
-class _ManageEmployeeState extends State<ManageEmployee> {
+class _EmployeeScreenState extends State<EmployeeScreen> {
   String search = "";
-
-  showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
-      content: Row(
-        children: [
-          const CircularProgressIndicator(),
-          Container(margin: const EdgeInsets.only(left: 7),child:const Text("Loading..." )),
-        ],),
-    );
-    showDialog(barrierDismissible: false,
-      context:context,
-      builder:(BuildContext context){
-        return alert;
-      },
-    );
-  }
 
   Widget employeeItem(Employee? employee) {
     return Container(
@@ -59,35 +44,45 @@ class _ManageEmployeeState extends State<ManageEmployee> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                    onPressed: () {
-
-                    },
-                    icon: const Icon(
-                      Icons.add_chart,
-                      color: Colors.green,
-                    )),
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.add_chart,
+                    color: Colors.green,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.add_card,
+                    color: Colors.green,
+                  ),
+                ),
                 IconButton(
                   onPressed: () {
                     AlertDialog(
-                      content: const Text("Apakah anda yakin ingin menghapus karyawan ini?"),
+                      content: const Text(
+                          "Apakah anda yakin ingin menghapus karyawan ini?"),
                       actions: [
-                        TextButton(onPressed: (){
-                          Navigator.pop(context);
-                          showLoaderDialog(context);
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            showLoaderDialog(context);
 
-                          deleteEmployee(employee?.id).then((value) => {
-                            if (value.error) {
-                              Navigator.pop(context)
-                            } else {
-                              Navigator.pop(context),
-                              setState(() {})
-                            }
-                          });
-
-                        }, child: const Text("Ya"),),
-                        TextButton(onPressed: (){
-                          Navigator.pop(context);
-                        }, child: const Text("Tidak"),),
+                            deleteEmployee(employee?.id).then((value) => {
+                                  if (value.error)
+                                    {Navigator.pop(context)}
+                                  else
+                                    {Navigator.pop(context), setState(() {})}
+                                });
+                          },
+                          child: const Text("Ya"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Tidak"),
+                        ),
                       ],
                     );
                   },
@@ -95,7 +90,7 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                     Icons.delete_forever,
                     color: Colors.red,
                   ),
-                )
+                ),
               ],
             )
           ],
@@ -139,8 +134,10 @@ class _ManageEmployeeState extends State<ManageEmployee> {
                       }),
                 );
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               }
             },

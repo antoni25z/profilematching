@@ -114,23 +114,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                     SharedPreferences pref = await SharedPreferences.getInstance();
                                     if (response.user.type == 0) {
                                       pref.setInt("type", response.user.type);
+                                      pref.setString("name", response.user.username);
+                                      pref.setString("dept", response.user.dept);
                                       if (context.mounted) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                const AdminHomeScreen(),
+                                                AdminHomeScreen(name: response.user.username),
                                           ),
                                         );
                                       }
                                     } else {
                                       pref.setInt("type", response.user.type);
+                                      pref.setString("name", response.user.username);
+                                      pref.setString("dept", response.user.dept);
                                       if (context.mounted) {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                const EmployeeHomeScreen(),
+                                                 EmployeeHomeScreen(name: response.user.username, dept: response.user.dept,),
                                           ),
                                         );
                                       }

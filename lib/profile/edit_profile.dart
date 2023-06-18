@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gaspol/profile/change_password.dart';
 
-class EditProfile extends StatelessWidget {
+
+class EditProfile extends StatefulWidget {
+  const EditProfile ({super.key, required this.name, required this.dept});
+
+  final String name;
+  final String dept;
+
+  @override
+  State<EditProfile> createState() => _StateEditProfile();
+}
+
+class _StateEditProfile extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,11 +26,11 @@ class EditProfile extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/images/avatar.png'),
+                backgroundImage: AssetImage('assets/images/ic_profile.png'),
               ),
               SizedBox(height: 16.0),
               Text(
-                'John Doe',
+                widget.name,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -29,7 +40,7 @@ class EditProfile extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                'Division: Software Engineer',
+                'Division: ${widget.dept}',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
@@ -42,23 +53,6 @@ class EditProfile extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SizedBox(height: 24.0),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Card(
-              child: ListTile(
-                leading: Icon(
-                  Icons.person,
-                  color: Color(0xFF666BDB),
-                ),
-                title: Text('Update Profile'),
-                trailing: Icon(Icons.arrow_right_sharp),
-                onTap: () {
-                  // Implement profile updating functionality here
-                },
-              ),
-            ),
-          ),
           SizedBox(height: 16.0),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -74,7 +68,7 @@ class EditProfile extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ChangePassword(),
+                      builder: (context) => ChangePassword(username: widget.name,),
                     ),
                   );
                 },
@@ -86,3 +80,5 @@ class EditProfile extends StatelessWidget {
     );
   }
 }
+
+

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:gaspol/response/GET_aspect_response.dart';
 import 'package:gaspol/response/GET_criteria_response.dart';
+import 'package:gaspol/response/GET_result_rating_response.dart';
 import 'package:http/http.dart' as http;
 
 import '../response/GET_aspect_criteria_response.dart';
@@ -164,5 +165,22 @@ Future<DefaultResponse> updateEmployee(
 
 Future<DefaultResponse> deleteEmployee(int? id) async {
   final response = await http.delete(Uri.parse("${baseUrl}delete_employee/$id"));
+  return DefaultResponse.fromJson(jsonDecode(response.body));
+}
+
+Future<ResultRatingResponse> getRatingResults(int year, int month) async {
+  final response = await http.get(Uri.parse("${baseUrl}result_rating?year=$year&month=$month"));
+  return ResultRatingResponse.fromJson(jsonDecode(response.body));
+}
+
+Future<DefaultResponse> resetPassword(String username, String oldPassword, String newPassword) async {
+  final response = await http.post(
+      Uri.parse("${baseUrl}reset_password"),
+      body: {
+        "username": username,
+        "old_password": oldPassword,
+        "new_password": newPassword
+      }
+  );
   return DefaultResponse.fromJson(jsonDecode(response.body));
 }
