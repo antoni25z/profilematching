@@ -67,12 +67,11 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                     var result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (BuildContext context) => AttendanceScreen(employeeId: employee?.id ?? 0)),
+                          builder: (BuildContext context) =>
+                              AttendanceScreen(employeeId: employee?.id ?? 0)),
                     );
                     if (result != null) {
-                      setState(() {
-
-                      });
+                      setState(() {});
                     }
                   },
                   icon: const Icon(
@@ -82,9 +81,10 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 ),
                 IconButton(
                   onPressed: () {
-                    showDialog(barrierDismissible: false,
-                      context:context,
-                      builder:(BuildContext context){
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
                         return AlertDialog(
                           content: const Text(
                               "Apakah anda yakin ingin menghapus karyawan ini?"),
@@ -101,11 +101,14 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                                 showLoaderDialog(context);
 
                                 deleteEmployee(employee?.id).then((value) => {
-                                  if (value.error)
-                                    {Navigator.pop(context)}
-                                  else
-                                    {Navigator.pop(context), setState(() {})}
-                                });
+                                      if (value.error)
+                                        {Navigator.pop(context)}
+                                      else
+                                        {
+                                          Navigator.pop(context),
+                                          setState(() {})
+                                        }
+                                    });
                               },
                               child: const Text("Ya"),
                             ),
@@ -142,9 +145,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                 builder: (BuildContext context) => const AddEmployee()),
           );
           if (result != null) {
-            setState(() {
-
-            });
+            setState(() {});
           }
         },
         backgroundColor: Colors.red,
@@ -190,15 +191,17 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                               var result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) => EditEmployee(employee: snapshot.data?.employee[index],)),
+                                    builder: (BuildContext context) =>
+                                        EditEmployee(
+                                          employee:
+                                              snapshot.data?.employee[index],
+                                        )),
                               );
                               if (result != null) {
-                                setState(() {
-
-                                });
+                                setState(() {});
                               }
                             },
-                              child: employeeItem(snapshot.data?.employee[index]),
+                            child: employeeItem(snapshot.data?.employee[index]),
                           );
                         }),
                   );

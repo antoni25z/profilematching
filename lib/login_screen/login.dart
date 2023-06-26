@@ -119,8 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       isLoading = false;
                                     });
                                     if (!response.error) {
-                                      if (response.user?.type == 1) {
-                                        Preferences().saveSession(response.user?.type, response.user?.username, response.user?.dept);
+                                      if (response.user?.deptId != 1) {
+                                        Preferences().saveSession(response.user?.deptId, response.user?.username, response.user?.dept);
                                         if (context.mounted) {
                                           Navigator.push(
                                             context,
@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           );
                                         }
                                       } else {
-                                        Preferences().saveSession(response.user?.type, response.user?.username, response.user?.dept);
+                                        Preferences().saveSession(response.user?.deptId, response.user?.username, response.user?.dept);
                                         if (context.mounted) {
                                           Navigator.push(
                                             context,

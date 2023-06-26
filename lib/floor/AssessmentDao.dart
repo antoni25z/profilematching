@@ -11,5 +11,5 @@ abstract class AssessmentDao {
   Future<List<Assessment>> getAllAssessments();
 
   @Query('DELETE * FROM Assessment')
-  Future<void> clearAssessment();
+  Future<void> clearAsstessment();
 }
